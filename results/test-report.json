@@ -1,0 +1,208 @@
+{
+  "results": [
+    {
+      "id": "GEO-01",
+      "category": "Geometría Esférica",
+      "name": "Constante R de la Tierra",
+      "description": "Verifica que el radio terrestre medio es 6371.0 km",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "GEO-02",
+      "category": "Geometría Esférica",
+      "name": "Normalización de longitud",
+      "description": "Mapea coordenadas cíclicamente en [-180°, 180°]",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "GEO-03",
+      "category": "Geometría Esférica",
+      "name": "Distancia angular esférica",
+      "description": "Calcula distancias ortodrómicas exactas",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "GEO-04",
+      "category": "Geometría Esférica",
+      "name": "Estabilidad en polos geográficos",
+      "description": "Destinos geodésicos en latitudes exactas de 90° y -90°",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "GEO-05",
+      "category": "Geometría Esférica",
+      "name": "Muestreo en espiral dorada (Fibonacci)",
+      "description": "Distribución uniforme de 128 muestras en disco esférico",
+      "status": "passed",
+      "durationMs": 0.1
+    },
+    {
+      "id": "GEO-06",
+      "category": "Geometría Esférica",
+      "name": "Mutación en plano tangente",
+      "description": "Desplazamiento ortonormal preservando norma unitaria",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "GEO-07",
+      "category": "Geometría Esférica",
+      "name": "Generador pseudoaleatorio determinista",
+      "description": "Reproducibilidad estricta con semilla Mulberry32",
+      "status": "passed",
+      "durationMs": 0.1
+    },
+    {
+      "id": "VAL-01",
+      "category": "Validador de Restricciones",
+      "name": "Restricción de 8 satélites",
+      "description": "Rechaza constelaciones con cardinalidad != 8",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "VAL-02",
+      "category": "Validador de Restricciones",
+      "name": "Límites de latitud y longitud",
+      "description": "Detecta satélites fuera de [-90°, 90°] o [-180°, 180°]",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "VAL-03",
+      "category": "Validador de Restricciones",
+      "name": "Zonas restringidas de desechos (debris)",
+      "description": "Detecta intrusión en Atlántico Norte (radio 12°)",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "VAL-04",
+      "category": "Validador de Restricciones",
+      "name": "Radio de exclusión de objetos (object)",
+      "description": "Detecta intrusión en Objeto A (radio 5°)",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "VAL-05",
+      "category": "Validador de Restricciones",
+      "name": "Zonas inactivas",
+      "description": "Ignora zonas cuando su flag active es false",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "COB-01",
+      "category": "Cobertura y Fitness",
+      "name": "Umbral de observación (>= 80%)",
+      "description": "Satélite centrado en región alcanza cobertura suficiente",
+      "status": "passed",
+      "durationMs": 0.5
+    },
+    {
+      "id": "COB-02",
+      "category": "Cobertura y Fitness",
+      "name": "Penalización total de aptitud",
+      "description": "Cualquier infracción resulta en fitness = 0.0",
+      "status": "passed",
+      "durationMs": 0.4
+    },
+    {
+      "id": "COB-03",
+      "category": "Cobertura y Fitness",
+      "name": "Separación angular mínima",
+      "description": "Calcula distancia geodésica mínima entre pares de satélites",
+      "status": "passed",
+      "durationMs": 0.4
+    },
+    {
+      "id": "REP-01",
+      "category": "Reparación Acotada",
+      "name": "Satélite factible no modificado",
+      "description": "Retorna 0 intentos para puntos válidos",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "REP-02",
+      "category": "Reparación Acotada",
+      "name": "Remuestreo acotado exitoso",
+      "description": "Relocaliza satélites infractores dentro de 300 intentos",
+      "status": "passed",
+      "durationMs": 0.1
+    },
+    {
+      "id": "REP-03",
+      "category": "Reparación Acotada",
+      "name": "Reparación de cromosoma completo",
+      "description": "Repara constelación completa de 8 satélites",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "REP-04",
+      "category": "Reparación Acotada",
+      "name": "Límite de presupuesto en inviabilidad",
+      "description": "Falla limpiamente cuando el espacio factible es nulo",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "EVO-01",
+      "category": "Motor Evolutivo",
+      "name": "Determinismo y reproducibilidad",
+      "description": "Misma semilla produce exactamente el mismo fitness e historial",
+      "status": "passed",
+      "durationMs": 24.9
+    },
+    {
+      "id": "EVO-02",
+      "category": "Motor Evolutivo",
+      "name": "Mejora evolutiva (Progreso del fitness)",
+      "description": "Fitness final superior o igual al inicial",
+      "status": "passed",
+      "durationMs": 25.4
+    },
+    {
+      "id": "EVO-03",
+      "category": "Motor Evolutivo",
+      "name": "Detección de imposibilidad de 180°",
+      "description": "Retorna status no_feasible_found inmediatamente",
+      "status": "passed",
+      "durationMs": 0.5
+    },
+    {
+      "id": "ESC-01",
+      "category": "Escenarios y Dinámica",
+      "name": "Integridad del escenario base",
+      "description": "6 regiones, 5 zonas, radio 650 km, 128 muestras",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "ESC-02",
+      "category": "Escenarios y Dinámica",
+      "name": "Escenario espacio reducido",
+      "description": "Amplía radios a 25° y 20° e incorpora 3 nuevas zonas",
+      "status": "passed",
+      "durationMs": 0
+    },
+    {
+      "id": "ESC-03",
+      "category": "Escenarios y Dinámica",
+      "name": "Revalidación ante restricción sobrevenida",
+      "description": "Detecta incompatibilidad de solución previa con nueva nube",
+      "status": "failed",
+      "durationMs": 1.3,
+      "error": "Inicialmente era válida"
+    }
+  ],
+  "passed": 24,
+  "failed": 1,
+  "durationMs": 53.7
+}
