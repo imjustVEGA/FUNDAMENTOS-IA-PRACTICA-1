@@ -11,3 +11,7 @@ F=100[0.8Σwᵣcᵣ/Σwᵣ+0.2Σwᵣ1(cᵣ≥0.8)/Σwᵣ]. Está entre 0 y 100. 
 Las cinco exclusiones son discos angulares cerrados: su borde también está prohibido. Todas las soluciones aceptadas deben ser factibles. Se reparan puntos inválidos con intentos acotados, se rechaza un individuo si falla la reparación y se limita el presupuesto total. No encontrar factibilidad no demuestra imposibilidad. Una zona activa de 180° sí constituye una prueba directa de imposibilidad del modelo.
 
 La referencia inicial es un individuo uniforme aleatorio válido, conservado como candidato y comparable con el resultado final. La población mezcla individuos aleatorios y sesgados hacia regiones, nunca usa una solución final predefinida. Los parámetros, muestras, semilla y escenarios se guardan para reproducibilidad.
+
+## Aportación del módulo de geometría
+
+La formulación complementaria del integrante 2 se conserva en [aportes/geometria_modelo.md](aportes/geometria_modelo.md). Su API aporta distancias Haversine, coordenadas cartesianas, regiones tipadas y fitness ponderado. El servicio integrado conserva Scenario de Pydantic como contrato externo y adapta las regiones internas. La diferencia entre 1000 muestras aleatorias del módulo aislado y 128 deterministas del motor debe declararse explícitamente; no se comparan como el mismo experimento.

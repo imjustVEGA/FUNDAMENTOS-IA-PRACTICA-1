@@ -4,3 +4,22 @@ __pycache__/
 node_modules/
 frontend/dist/
 *.tsbuildinfo
+# Entornos virtuales (raíz y anidados)
+.venv-*/
+backend/.venv/
+backend/.venv-*/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+# Tests
+# Node
+dist/
+build/
+# IDE / OS
+.env
+.DS_Store
+.vscode/
+.idea/

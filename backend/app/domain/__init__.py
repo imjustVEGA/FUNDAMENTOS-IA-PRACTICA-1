@@ -1,0 +1,63 @@
+"""Geometría esférica, regiones y cobertura de AstroShield."""
+
+from .coverage import (
+    CoberturaRegion,
+    cobertura_por_region,
+    cobertura_ponderada,
+    fitness_por_cobertura,
+    regiones_cubiertas_ponderadas,
+)
+from .regions import (
+    OBJETOS_OCUPADOS_BASE,
+    REGIONES_BASE,
+    ZONAS_RESTRINGIDAS_BASE,
+    ObjetoOcupado,
+    RegionInteres,
+    ZonaRestringida,
+    muestrear_region,
+    precomputar_muestras,
+    satelite_en_alguna_zona,
+    satelite_en_zona,
+)
+from .sphere_geometry import (
+    ALTITUD_SATELITE_KM,
+    RADIO_OBSERVACION_KM,
+    RADIO_REGION_KM,
+    R_TIERRA_KM,
+    UMBRAL_COBERTURA_REGION,
+    distancia_haversine_km,
+    km_a_angulo_central,
+    latlon_a_xyz,
+    normalizar_longitud,
+    punto_dentro_de_disco,
+    validar_coordenada,
+)
+
+__all__ = [
+    "ALTITUD_SATELITE_KM",
+    "CoberturaRegion",
+    "OBJETOS_OCUPADOS_BASE",
+    "ObjetoOcupado",
+    "RADIO_OBSERVACION_KM",
+    "RADIO_REGION_KM",
+    "R_TIERRA_KM",
+    "REGIONES_BASE",
+    "RegionInteres",
+    "UMBRAL_COBERTURA_REGION",
+    "ZONAS_RESTRINGIDAS_BASE",
+    "ZonaRestringida",
+    "cobertura_por_region",
+    "cobertura_ponderada",
+    "distancia_haversine_km",
+    "fitness_por_cobertura",
+    "km_a_angulo_central",
+    "latlon_a_xyz",
+    "muestrear_region",
+    "normalizar_longitud",
+    "precomputar_muestras",
+    "punto_dentro_de_disco",
+    "regiones_cubiertas_ponderadas",
+    "satelite_en_alguna_zona",
+    "satelite_en_zona",
+    "validar_coordenada",
+]

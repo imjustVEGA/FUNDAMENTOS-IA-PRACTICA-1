@@ -72,3 +72,7 @@ npm.cmd exec -- openapi-typescript openapi.json -o src/schema.d.ts
 | docs/ | Supuestos, algoritmo, análisis, equipo y uso de IA |
 
 Limitaciones: discretización de 128 muestras, sin dinámica orbital ni separación física obligatoria; no se garantiza óptimo global. Un fallo de búsqueda no prueba imposibilidad salvo casos geométricos directos como la exclusión de 180°. Ver docs/05_arquitectura.md para límites de persistencia y uso local. La revisión humana del equipo y sus commits reales siguen pendientes; véase docs/06_organizacion_equipo.md.
+
+## Integración de geometría y cobertura
+
+El módulo del integrante 2 se conserva en backend/app/domain y sus pruebas en backend/tests/domain. Ejecutar las pruebas de ambos conjuntos desde la raíz con `python -m pytest`. La guía original se conserva en docs/aportes/geometria_README.md; se unificará su contrato con el motor sin eliminar la API académica.
