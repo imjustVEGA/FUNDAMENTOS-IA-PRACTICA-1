@@ -57,3 +57,16 @@ def configurations(run_id: str):
 def compare(request: ComparisonRequest):
     before=Evaluator(request.previous_scenario).evaluate([[p.lat,p.lon] for p in request.configuration])
     return Comparison(before=before,after=evaluate(request))
+
+from .restrictions.models import ValidationResult, ScenarioComparison
+from .restrictions.validator import validar_configuracion
+from .restrictions.scenarios import reevaluar_configuracion_anterior
+
+@app.post('/api/restrictions/validate', response_model=ValidationResult)
+def restriction_validate(request: EvaluationRequest):
+    return validar_configuracion(request.configuration, request.scenario)
+
+@app.post('/api/restrictions/compare', response_model=ScenarioComparison)
+def restriction_compare(request: ComparisonRequest):
+    return reevaluar_configuracion_anterior(request.configuration, request.previous_scenario, request.scenario)
+

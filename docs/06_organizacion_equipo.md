@@ -6,7 +6,7 @@ Esta distribución define propietarios futuros; no atribuye trabajo realizado ni
 |---|---|---|
 | 1 · Ismael | models.py, evolution.py, arquitectura, docs 01/02/05 | Cromosoma, fitness, selección, cruza, mutación, elitismo, presupuestos y límites |
 | 2 | geometry.py, coverage.py | Distancia esférica, polos, antimeridiano, muestreo y unión |
-| 3 | constraints.py, scenarios.py, edición de escenarios | Exclusiones, bordes, reparación, fallo acotado y reevaluación |
+| 3 · Owen | backend/restrictions/, constraints.py, scenarios.py, docs/restricciones_owen.md | Exclusiones, bordes, reparación, fallo acotado, escenarios A-E y reevaluación |
 | 4 | Globe.tsx, land.geojson | Correspondencia de coordenadas, casquetes, capas y cámara |
 | 5 | tests/, scripts/experiments.py, results/ | Reproducibilidad, variabilidad, ablación y estadísticas |
 | 6 | App.tsx, style.css, API, README y guías | Flujo de usuario, errores, exportación, contratos y ejecución |
