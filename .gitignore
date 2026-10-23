@@ -1,0 +1,26 @@
+﻿# Entornos virtuales (raíz y anidados)
+.venv/
+.venv-*/
+backend/.venv/
+backend/.venv-*/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Tests
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+build/
+
+# IDE / OS
+.env
+.DS_Store
+.vscode/
+.idea/
