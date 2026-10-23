@@ -1,12 +1,54 @@
-from .models import Scenario, Region, Zone
+"""Módulo de escenarios de AstroShield (Integrante 3: Owen).
 
-def base_scenario() -> Scenario:
-    return Scenario(regions=[Region(name=n, lat=a, lon=b, weight=w) for n,a,b,w in [
-        ('Península de Yucatán',20.5,-89,3),('Amazonía brasileña',-3.5,-62,3),
-        ('California',36.8,-119.4,2),('Sahel',15,0,2),('Japón',36,138,2),
-        ('Interior de Australia',-25,133,1)]], zones=[
-        Zone(name='Atlántico Norte',lat=45,lon=-35,radius_deg=12),
-        Zone(name='Pacífico Sur',lat=-30,lon=-120,radius_deg=10),
-        Zone(name='Polar norte',lat=78,lon=30,radius_deg=8),
-        Zone(name='Objeto A',lat=10,lon=45,radius_deg=5,kind='object'),
-        Zone(name='Objeto B',lat=-15,lon=110,radius_deg=5,kind='object')])
+Define el escenario base y re-exporta funciones de manipulación dinámica
+de escenarios del paquete backend.restrictions.
+"""
+from .models import Scenario, Region, Zone
+from .restrictions.scenarios import (
+    base_scenario,
+    activar_zona,
+    desactivar_zona,
+    modificar_radio_zona,
+    agregar_zona_restringida,
+    agregar_objeto_existente,
+    actualizar_objeto,
+    modificar_prioridad_region,
+    guardar_escenario_json,
+    cargar_escenario_json,
+    reevaluar_configuracion_anterior,
+    crear_escenario_a_normal,
+    crear_escenario_b_espacio_reducido,
+    crear_escenario_c_configuracion_invalida,
+    crear_escenario_d_inviable,
+    crear_escenario_e_cambio_condiciones,
+    analizar_viabilidad_teorica,
+    ZONAS_RESTINGIDAS_OBLIGATORIAS,
+    OBJETOS_EXISTENTES_OBLIGATORIOS,
+    REGIONES_TERRESTRES_BASE,
+)
+
+__all__ = [
+    'Scenario',
+    'Region',
+    'Zone',
+    'base_scenario',
+    'activar_zona',
+    'desactivar_zona',
+    'modificar_radio_zona',
+    'agregar_zona_restringida',
+    'agregar_objeto_existente',
+    'actualizar_objeto',
+    'modificar_prioridad_region',
+    'guardar_escenario_json',
+    'cargar_escenario_json',
+    'reevaluar_configuracion_anterior',
+    'crear_escenario_a_normal',
+    'crear_escenario_b_espacio_reducido',
+    'crear_escenario_c_configuracion_invalida',
+    'crear_escenario_d_inviable',
+    'crear_escenario_e_cambio_condiciones',
+    'analizar_viabilidad_teorica',
+    'ZONAS_RESTINGIDAS_OBLIGATORIAS',
+    'OBJETOS_EXISTENTES_OBLIGATORIOS',
+    'REGIONES_TERRESTRES_BASE',
+]
