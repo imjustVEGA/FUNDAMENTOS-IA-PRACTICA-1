@@ -1,0 +1,8 @@
+{
+  "name": "AstroShield · Constelación Evolutiva",
+  "description": "Centro de monitoreo y laboratorio de optimización evolutiva para constelaciones de satélites terrestres con cobertura inteligente y restricciones orbitales.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

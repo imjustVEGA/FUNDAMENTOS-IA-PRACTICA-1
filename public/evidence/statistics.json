@@ -1,0 +1,268 @@
+{
+  "base": {
+    "mean": 98.46153846153847,
+    "std_population": 3.076923076923077,
+    "min": 92.3076923076923,
+    "max": 100.0,
+    "mean_covered": 5.8
+  },
+  "no_mutation": {
+    "mean": 95.33653846153847,
+    "std_population": 5.874205221325561,
+    "min": 84.61538461538463,
+    "max": 100.0,
+    "mean_covered": 5.6
+  },
+  "reduced": {
+    "mean": 48.00961538461539,
+    "std_population": 1.7897534622459352,
+    "min": 44.85576923076923,
+    "max": 50.43269230769232,
+    "mean_covered": 3.0
+  },
+  "priority": {
+    "mean": 47.0,
+    "std_population": 5.663954620620161,
+    "min": 40.0625,
+    "max": 52.95833333333334,
+    "mean_covered": 3.0
+  },
+  "priority_comparison": {
+    "previous_under_new_weights": {
+      "valid": true,
+      "status": "valid_insufficient",
+      "fitness": 30.875000000000004,
+      "covered_regions": 3,
+      "coverage": [
+        {
+          "name": "Península de Yucatán",
+          "fraction": 0.21875,
+          "covered": false,
+          "weight": 20.0
+        },
+        {
+          "name": "Amazonía brasileña",
+          "fraction": 0.203125,
+          "covered": false,
+          "weight": 3.0
+        },
+        {
+          "name": "California",
+          "fraction": 0.171875,
+          "covered": false,
+          "weight": 2.0
+        },
+        {
+          "name": "Sahel",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Japón",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Interior de Australia",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 1.0
+        }
+      ],
+      "violations": [],
+      "separation_deg": 30.09612138362531
+    },
+    "new": {
+      "valid": true,
+      "status": "valid_insufficient",
+      "fitness": 52.95833333333334,
+      "covered_regions": 3,
+      "coverage": [
+        {
+          "name": "Península de Yucatán",
+          "fraction": 0.6640625,
+          "covered": false,
+          "weight": 20.0
+        },
+        {
+          "name": "Amazonía brasileña",
+          "fraction": 0.0,
+          "covered": false,
+          "weight": 3.0
+        },
+        {
+          "name": "California",
+          "fraction": 0.1640625,
+          "covered": false,
+          "weight": 2.0
+        },
+        {
+          "name": "Sahel",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Japón",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Interior de Australia",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 1.0
+        }
+      ],
+      "violations": [],
+      "separation_deg": 7.066412517845692
+    }
+  },
+  "restriction_comparison": {
+    "before": {
+      "valid": true,
+      "status": "valid",
+      "fitness": 100.0,
+      "covered_regions": 6,
+      "coverage": [
+        {
+          "name": "Península de Yucatán",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 3.0
+        },
+        {
+          "name": "Amazonía brasileña",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 3.0
+        },
+        {
+          "name": "California",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Sahel",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Japón",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Interior de Australia",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 1.0
+        }
+      ],
+      "violations": [],
+      "separation_deg": 35.9533374393528
+    },
+    "previous_under_new_zones": {
+      "valid": false,
+      "status": "invalid",
+      "fitness": 0.0,
+      "covered_regions": 6,
+      "coverage": [
+        {
+          "name": "Península de Yucatán",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 3.0
+        },
+        {
+          "name": "Amazonía brasileña",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 3.0
+        },
+        {
+          "name": "California",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Sahel",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Japón",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Interior de Australia",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 1.0
+        }
+      ],
+      "violations": [
+        "S6: Península de Yucatán bloqueada",
+        "S4: Amazonía brasileña bloqueada",
+        "S7: California bloqueada"
+      ],
+      "separation_deg": 35.9533374393528
+    },
+    "new": {
+      "valid": true,
+      "status": "valid_insufficient",
+      "fitness": 48.36538461538462,
+      "covered_regions": 3,
+      "coverage": [
+        {
+          "name": "Península de Yucatán",
+          "fraction": 0.21875,
+          "covered": false,
+          "weight": 3.0
+        },
+        {
+          "name": "Amazonía brasileña",
+          "fraction": 0.203125,
+          "covered": false,
+          "weight": 3.0
+        },
+        {
+          "name": "California",
+          "fraction": 0.171875,
+          "covered": false,
+          "weight": 2.0
+        },
+        {
+          "name": "Sahel",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Japón",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 2.0
+        },
+        {
+          "name": "Interior de Australia",
+          "fraction": 1.0,
+          "covered": true,
+          "weight": 1.0
+        }
+      ],
+      "violations": [],
+      "separation_deg": 30.09612138362531
+    }
+  }
+}

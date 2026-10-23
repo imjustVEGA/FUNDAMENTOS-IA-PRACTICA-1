@@ -1,0 +1,16 @@
+
+> astroshield-educativo@1.0.0 test
+> node --test tests/*.test.mjs
+
+✔ adaptador conserva las 8 posiciones y porcentajes reales de la API (1.5153ms)
+✔ capas respetan activación, objetos, radio y violaciones por satélite (0.999ms)
+✔ fallo factible no crea satélites ni datos de demostración (0.2004ms)
+✔ proyección y casquetes conservan escala y distancia angular incluso en polos (4.3207ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 390.2191

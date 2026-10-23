@@ -1,0 +1,120 @@
+{
+  "run_id": null,
+  "status": "no_feasible_found",
+  "message": "Una zona activa de 180° excluye toda la esfera: escenario imposible en este modelo.",
+  "seed": 42,
+  "parameters": {
+    "seed": 42,
+    "population": 80,
+    "generations": 120,
+    "crossover": 0.85,
+    "mutation": 0.25,
+    "tournament": 3,
+    "elite": 4,
+    "attempts": 300
+  },
+  "scenario": {
+    "name": "Base",
+    "regions": [
+      {
+        "lat": 20.5,
+        "lon": -89.0,
+        "name": "Península de Yucatán",
+        "weight": 3.0,
+        "radius_km": 300.0
+      },
+      {
+        "lat": -3.5,
+        "lon": -62.0,
+        "name": "Amazonía brasileña",
+        "weight": 3.0,
+        "radius_km": 300.0
+      },
+      {
+        "lat": 36.8,
+        "lon": -119.4,
+        "name": "California",
+        "weight": 2.0,
+        "radius_km": 300.0
+      },
+      {
+        "lat": 15.0,
+        "lon": 0.0,
+        "name": "Sahel",
+        "weight": 2.0,
+        "radius_km": 300.0
+      },
+      {
+        "lat": 36.0,
+        "lon": 138.0,
+        "name": "Japón",
+        "weight": 2.0,
+        "radius_km": 300.0
+      },
+      {
+        "lat": -25.0,
+        "lon": 133.0,
+        "name": "Interior de Australia",
+        "weight": 1.0,
+        "radius_km": 300.0
+      }
+    ],
+    "zones": [
+      {
+        "lat": 45.0,
+        "lon": -35.0,
+        "name": "Atlántico Norte",
+        "radius_deg": 12.0,
+        "active": true,
+        "kind": "debris"
+      },
+      {
+        "lat": -30.0,
+        "lon": -120.0,
+        "name": "Pacífico Sur",
+        "radius_deg": 10.0,
+        "active": true,
+        "kind": "debris"
+      },
+      {
+        "lat": 78.0,
+        "lon": 30.0,
+        "name": "Polar norte",
+        "radius_deg": 8.0,
+        "active": true,
+        "kind": "debris"
+      },
+      {
+        "lat": 10.0,
+        "lon": 45.0,
+        "name": "Objeto A",
+        "radius_deg": 5.0,
+        "active": true,
+        "kind": "object"
+      },
+      {
+        "lat": -15.0,
+        "lon": 110.0,
+        "name": "Objeto B",
+        "radius_deg": 5.0,
+        "active": true,
+        "kind": "object"
+      },
+      {
+        "lat": 0.0,
+        "lon": 0.0,
+        "name": "Exclusión total",
+        "radius_deg": 180.0,
+        "active": true,
+        "kind": "debris"
+      }
+    ],
+    "footprint_km": 650.0,
+    "samples": 128
+  },
+  "initial": null,
+  "final": null,
+  "initial_evaluation": null,
+  "final_evaluation": null,
+  "history": []
+}
