@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import {
   Activity,
@@ -13,7 +13,6 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
-import { mockOptimizationData } from '../../mocks/mockOptimizationData';
 import type {
   ConfigurationView,
   OptimizationResponse,
@@ -26,7 +25,7 @@ import type {
 import { Scene } from './Scene';
 
 export interface GlobeVisualizerProps {
-  /** Respuesta normalizada de optimización; si se omite, carga el mock incluido. */
+  /** Datos reales normalizados. Sin datos muestra un estado vacío. */
   optimization?: OptimizationResponse;
   /** También se pueden inyectar ambos estados sin envolverlos en OptimizationResponse. */
   initialConfiguration?: OptimizationState;
@@ -81,7 +80,7 @@ function SelectionCard({ selection, onClose }: { selection: VisualizationSelecti
           <Detail label="Vista" value={`Configuración ${selection.configuration}`} />
         </>}
         {kind === 'region' && <>
-          <Detail label="Prioridad" value={data.priority[0].toUpperCase() + data.priority.slice(1)} />
+          <Detail label="Peso regional" value={String(data.weight??data.priority)} />
           <Detail label="Radio objetivo" value={`${data.radiusKm} km`} />
           <Detail label="Cobertura" value={`${data.coveragePercentage}%`} tone={data.isCovered ? 'green' : 'amber'} />
           <Detail label="Estado" value={data.isCovered ? 'Cubierta' : 'No cubierta'} tone={data.isCovered ? 'green' : 'amber'} />
@@ -106,19 +105,20 @@ function Detail({ label, value, tone }: { label: string; value: string; tone?: '
 }
 
 export function GlobeVisualizer({
-  optimization = mockOptimizationData,
+  optimization,
   initialConfiguration,
   finalConfiguration,
   restrictedZones,
   occupiedObjects,
   className = '',
 }: GlobeVisualizerProps) {
-  const initialState = initialConfiguration ?? optimization.initialState;
-  const finalState = finalConfiguration ?? optimization.finalState;
-  const zones = restrictedZones ?? optimization.restrictedZones;
-  const objects = occupiedObjects ?? optimization.occupiedObjects;
+  const initialState = initialConfiguration ?? optimization?.initialState ?? {satellites:[],regions:[]};
+  const finalState = finalConfiguration ?? optimization?.finalState ?? {satellites:[],regions:[]};
+  const zones = restrictedZones ?? optimization?.restrictedZones ?? [];
+  const objects = occupiedObjects ?? optimization?.occupiedObjects ?? [];
   const [view, setView] = useState<ConfigurationView>('final');
   const [selection, setSelection] = useState<VisualizationSelection | null>(null);
+  useEffect(()=>{setSelection(null);},[optimization,initialConfiguration,finalConfiguration]);
   const [layers, setLayers] = useState<VisualizationLayers>({
     satellites: true,
     footprints: true,
@@ -135,11 +135,11 @@ export function GlobeVisualizer({
   }
 
   return (
-    <main className={`globe-shell relative h-[100svh] min-h-[620px] w-full overflow-hidden text-slate-100 ${className}`}>
+    <main className={`globe-shell relative h-[min(78svh,820px)] min-h-[620px] w-full overflow-hidden text-slate-100 ${className}`}>
       <div className="pointer-events-none absolute inset-0 z-0 opacity-50" style={{ backgroundImage: 'radial-gradient(rgba(64,139,174,.14) 0.7px, transparent 0.7px)', backgroundSize: '32px 32px', maskImage: 'linear-gradient(to bottom, black, transparent 82%)' }} />
 
       <div className="canvas-shell absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 11.4], fov: 38 }} dpr={[1, 1.7]} gl={{ antialias: true, alpha: false }}>
+        <Canvas camera={{ position: [0, 0, 18], fov: 45 }} dpr={[1, 1.7]} gl={{ antialias: true, alpha: false }}>
           <Scene
             initialState={initialState}
             finalState={finalState}
@@ -148,6 +148,7 @@ export function GlobeVisualizer({
             view={view}
             layers={layers}
             onSelect={setSelection}
+            footprintKm={optimization?.footprintKm??650}
           />
         </Canvas>
       </div>
@@ -180,12 +181,12 @@ export function GlobeVisualizer({
             <span className="text-[9px] text-slate-600">{Object.values(layers).filter(Boolean).length}/6 activas</span>
           </div>
           <div className="space-y-0.5">
-            {layerItems.map(({ key, label, detail, icon: Icon, color }) => {
+            {layerItems.map(({ key, label, icon: Icon, color }) => {
               const enabled = layers[key];
               return <button key={key} onClick={() => toggleLayer(key)} aria-pressed={enabled} className="group flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left transition hover:bg-white/[0.035]">
                 <Icon size={14} style={{ color: enabled ? color : '#5b6472' }} strokeWidth={1.7} />
                 <span className={`flex-1 text-[10px] ${enabled ? 'text-slate-200' : 'text-slate-500'}`}>{label}</span>
-                <span className="mr-1 text-[9px] text-slate-600">{detail}</span>
+                <span className="mr-1 text-[9px] text-slate-600">{key==='satellites'?`${satelliteCount} unidades`:key==='footprints'?`${optimization?.footprintKm??650} km`:key==='regions'?`${finalState.regions.length} zonas`:key==='restrictedZones'?`${zones.length} alertas`:`${objects.length} objetos`}</span>
                 <span className={`grid size-3.5 place-items-center rounded border transition ${enabled ? 'border-cyan-300/40 bg-cyan-300/15 text-cyan-200' : 'border-slate-700 text-transparent'}`}>{enabled && <Check size={10} />}</span>
               </button>;
             })}

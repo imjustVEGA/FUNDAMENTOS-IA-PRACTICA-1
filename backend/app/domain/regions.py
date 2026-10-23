@@ -13,6 +13,7 @@ from .sphere_geometry import (
     distancia_haversine_km,
     normalizar_longitud,
     validar_coordenada,
+    destinos_geodesicos,
 )
 
 N_MUESTRAS_REGION = 1000
@@ -132,19 +133,8 @@ def muestrear_region(
     u = rng.uniform(0.0, 1.0, size=n)
     theta = rng.uniform(0.0, 2.0 * np.pi, size=n)
     distancia = np.arccos(1.0 - u * (1.0 - np.cos(delta_max)))
-    lat0 = math.radians(region.lat)
-    lon0 = math.radians(region.lon)
-    lat = np.arcsin(
-        np.sin(lat0) * np.cos(distancia)
-        + np.cos(lat0) * np.sin(distancia) * np.cos(theta)
-    )
-    lon = lon0 + np.arctan2(
-        np.sin(theta) * np.sin(distancia) * np.cos(lat0),
-        np.cos(distancia) - np.sin(lat0) * np.sin(lat),
-    )
-    latitudes = np.rad2deg(lat)
-    longitudes = np.asarray(normalizar_longitud(np.rad2deg(lon)), dtype=float)
-    return latitudes, longitudes
+    puntos = destinos_geodesicos(region.lat, region.lon, distancia, theta)
+    return puntos[:, 0], puntos[:, 1]
 
 
 def precomputar_muestras(

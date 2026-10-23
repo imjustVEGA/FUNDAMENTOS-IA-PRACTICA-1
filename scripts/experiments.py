@@ -1,6 +1,7 @@
 """Ejecutar desde la raíz: python -m scripts.experiments."""
 import csv
 import json
+import argparse
 from pathlib import Path
 import numpy as np
 import matplotlib
@@ -13,8 +14,9 @@ from backend.coverage import Evaluator
 
 OUT=Path('results')
 
-def main():
-    OUT.mkdir(exist_ok=True)
+def main(output=OUT, analysis=Path('docs/04_analisis_resultados.md')):
+    OUT=Path(output)
+    OUT.mkdir(parents=True,exist_ok=True)
     rows=[]
     runs={}
     scenarios={'base':base_scenario()}
@@ -72,7 +74,7 @@ def main():
     base_stats=stats['base']; nomut=stats['no_mutation']; red=stats['reduced']; pc=stats['priority_comparison']
     text=f'''# Análisis de ejecuciones reales
 
-Generado por `python -m scripts.experiments`. Parámetros completos, escenarios y 121 generaciones por ejecución están en results/*.json. Cinco semillas: 42, 7, 19, 73, 101. Desviación estándar poblacional (ddof=0).
+Generado por `python -m scripts.experiments`. Parámetros completos, escenarios y 121 generaciones por ejecución están en {OUT.as_posix()}/*.json. Cinco semillas: 42, 7, 19, 73, 101. Desviación estándar poblacional (ddof=0).
 
 Base semilla 42: fitness {base.initial_evaluation.fitness:.6f} → {base.final_evaluation.fitness:.6f}; mejora absoluta {base.final_evaluation.fitness-base.initial_evaluation.fitness:.6f} puntos. Regiones suficientes: {base.final_evaluation.covered_regions}/6. Sin cubrir: {', '.join(c.name for c in base.final_evaluation.coverage if not c.covered) or 'ninguna'}. Violaciones finales: {len(base.final_evaluation.violations)}.
 
@@ -84,7 +86,12 @@ Cambio de prioridades sobre el escenario reducido: solución anterior reevaluada
 
 Una puntuación 100 prueba el máximo de este fitness discretizado, pero no una constelación orbital óptima. Las regiones pequeñas y ocho huellas grandes facilitan saturación. No se recompensa el área fuera de las regiones, ni existe redundancia temporal, combustible o riesgo dinámico. El desempate por separación mejora dispersión sin sacrificar fitness. Las gráficas provienen de estas ejecuciones y no fueron suavizadas ni modificadas.
 '''
-    Path('docs/04_analisis_resultados.md').write_text(text,encoding='utf-8')
+    Path(analysis).write_text(text,encoding='utf-8')
     (OUT/'interpretations.json').write_text(json.dumps({'analysis':text},ensure_ascii=False,indent=2),encoding='utf-8')
 
-if __name__=='__main__': main()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',default='results')
+    parser.add_argument('--analysis',default='docs/04_analisis_resultados.md')
+    args=parser.parse_args()
+    main(args.output,args.analysis)

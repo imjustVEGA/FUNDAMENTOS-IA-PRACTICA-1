@@ -119,16 +119,14 @@ def actualizar_objeto(
     """Actualiza la posición, radio o estado de un objeto existente."""
     for z in escenario.zones:
         if z.name.strip().lower() == nombre.strip().lower() and getattr(z, 'kind', 'debris') == 'object':
-            if lat is not None:
-                z.lat = float(lat)
-            if lon is not None:
-                z.lon = float(lon)
-            if radio_exclusion_deg is not None:
-                if not (0 < radio_exclusion_deg <= 180):
-                    raise ValueError("El radio de exclusión debe estar entre 0° y 180°.")
-                z.radius_deg = float(radio_exclusion_deg)
-            if activo is not None:
-                z.active = bool(activo)
+            # Validar todo antes de modificar: una actualización fallida es atómica.
+            fields = z.model_dump()
+            for key, value in [('lat', lat), ('lon', lon), ('radius_deg', radio_exclusion_deg), ('active', activo)]:
+                if value is not None:
+                    fields[key] = value
+            validated = Zone.model_validate(fields)
+            z.lat, z.lon = validated.lat, validated.lon
+            z.radius_deg, z.active = validated.radius_deg, validated.active
             return True
     return False
 
@@ -236,7 +234,7 @@ def crear_escenario_c_configuracion_invalida() -> tuple[Scenario, list[Point]]:
     
     - Satélite 1: Dentro de Atlántico Norte (lat 45°, lon -35°)
     - Satélite 2: Dentro del Objeto A (lat 10°, lon 45°)
-    - Satélite 3: En el límite exacto del Pacífico Sur (lat -30°, lon -110°) -> a 10°
+    - Satélite 3: En el límite exacto del Pacífico Sur (lat -20°, lon -120°) -> a 10°
     - Satélites 4 a 8: Posiciones sin violaciones
     """
     s = base_scenario()
@@ -245,7 +243,7 @@ def crear_escenario_c_configuracion_invalida() -> tuple[Scenario, list[Point]]:
     configuracion_invalida = [
         Point(lat=45.0, lon=-35.0),      # S1: Centro de Atlántico Norte (debe fallar por zona_restringida)
         Point(lat=10.0, lon=45.0),       # S2: Centro de Objeto A (debe fallar por objeto_existente)
-        Point(lat=-30.0, lon=-110.0),    # S3: A 10.0° del Pacífico Sur (-30, -120), sobre el borde (debe fallar)
+        Point(lat=-20.0, lon=-120.0),    # S3: separación meridional exacta de 10°.
         Point(lat=0.0, lon=10.0),        # S4: Válido
         Point(lat=-20.0, lon=-50.0),     # S5: Válido
         Point(lat=60.0, lon=120.0),      # S6: Válido

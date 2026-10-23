@@ -1,5 +1,6 @@
 import numpy as np
-R = 6371.0
+from .app.domain.sphere_geometry import R_TIERRA_KM, destinos_geodesicos
+R = R_TIERRA_KM
 
 def vectors(coords):
     c = np.radians(np.asarray(coords, dtype=float))
@@ -14,10 +15,7 @@ def disk_samples(lat,lon,radius_km,count):
     i = np.arange(count)
     t = np.arccos(1-(i+.5)/count*(1-np.cos(radius_km/R)))
     az = i*np.pi*(3-np.sqrt(5))
-    a,b = np.radians([lat,lon])
-    lat2 = np.arcsin(np.sin(a)*np.cos(t)+np.cos(a)*np.sin(t)*np.cos(az))
-    lon2 = b+np.arctan2(np.sin(az)*np.sin(t)*np.cos(a),np.cos(t)-np.sin(a)*np.sin(lat2))
-    return np.column_stack([np.degrees(lat2),(np.degrees(lon2)+180)%360-180])
+    return destinos_geodesicos(lat, lon, t, az)
 
 def uniform_point(rng):
     return np.array([np.degrees(np.arcsin(rng.uniform(-1,1))),rng.uniform(-180,180)])

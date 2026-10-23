@@ -9,6 +9,12 @@ from .models import Scenario, EvaluationRequest, OptimizeRequest, ComparisonRequ
 from .scenarios import base_scenario
 from .coverage import Evaluator
 from .evolution import optimize
+from .restrictions.models import ValidationResult, ScenarioComparison
+from .restrictions.validator import validar_configuracion
+from .restrictions.scenarios import (
+    reevaluar_configuracion_anterior, crear_escenario_b_espacio_reducido,
+    crear_escenario_d_inviable, crear_escenario_e_cambio_condiciones,
+)
 
 app=FastAPI(title='AstroShield educativo',version='1.0.0')
 app.add_middleware(CORSMiddleware,allow_origins=['http://localhost:5173','http://127.0.0.1:5173'],allow_methods=['GET','POST'],allow_headers=['Content-Type'])
@@ -23,6 +29,12 @@ def evaluate(request):
 
 @app.get('/api/scenario',response_model=Scenario)
 def scenario(): return base_scenario()
+
+@app.get('/api/scenarios',response_model=dict[str,Scenario])
+def scenarios():
+    _, changed, _ = crear_escenario_e_cambio_condiciones()
+    return {'base':base_scenario(), 'reduced':crear_escenario_b_espacio_reducido(),
+            'changed':changed, 'impossible':crear_escenario_d_inviable()}
 
 @app.post('/api/evaluate',response_model=Evaluation)
 def evaluation(request: EvaluationRequest): return evaluate(request)
@@ -57,10 +69,6 @@ def configurations(run_id: str):
 def compare(request: ComparisonRequest):
     before=Evaluator(request.previous_scenario).evaluate([[p.lat,p.lon] for p in request.configuration])
     return Comparison(before=before,after=evaluate(request))
-
-from .restrictions.models import ValidationResult, ScenarioComparison
-from .restrictions.validator import validar_configuracion
-from .restrictions.scenarios import reevaluar_configuracion_anterior
 
 @app.post('/api/restrictions/validate', response_model=ValidationResult)
 def restriction_validate(request: EvaluationRequest):

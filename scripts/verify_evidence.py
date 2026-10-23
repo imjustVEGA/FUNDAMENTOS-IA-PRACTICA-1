@@ -4,10 +4,12 @@ import numpy as np
 from backend.models import Run
 from backend.coverage import Evaluator
 import json
+import argparse
 
-def main():
+def main(directory='results'):
+    directory=Path(directory)
     count=0
-    for file in Path('results').glob('*_*.json'):
+    for file in directory.glob('*_*.json'):
         r=Run.model_validate_json(file.read_text(encoding='utf-8'))
         if r.status=='success':
             assert len(r.final)==8
@@ -23,13 +25,16 @@ def main():
             assert r.final is None and not r.history
         count+=1
     assert count==21, f'Se esperaban 21 ejecuciones, se encontraron {count}'
-    stats=json.loads(Path('results/statistics.json').read_text(encoding='utf-8'))
+    stats=json.loads((directory/'statistics.json').read_text(encoding='utf-8'))
     assert stats['priority_comparison']['new']['fitness'] > stats['priority_comparison']['previous_under_new_weights']['fitness']
     assert not stats['restriction_comparison']['previous_under_new_zones']['valid']
     for seed in [42,7,19,73,101]:
-        a=Run.model_validate_json(Path(f'results/base_{seed}.json').read_text(encoding='utf-8'))
-        b=Run.model_validate_json(Path(f'results/no_mutation_{seed}.json').read_text(encoding='utf-8'))
+        a=Run.model_validate_json((directory/f'base_{seed}.json').read_text(encoding='utf-8'))
+        b=Run.model_validate_json((directory/f'no_mutation_{seed}.json').read_text(encoding='utf-8'))
         assert a.initial==b.initial and a.history[0]==b.history[0]
     print(f'{count} ejecuciones auditadas: fitness, cobertura, restricciones, historial y elitismo correctos.')
 
-if __name__=='__main__': main()
+if __name__=='__main__':
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--directory',default='results')
+    main(parser.parse_args().directory)

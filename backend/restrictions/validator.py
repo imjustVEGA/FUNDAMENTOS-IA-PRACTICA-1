@@ -41,12 +41,18 @@ def validar_coordenadas(satelite: Any, satelite_idx: int = 1) -> list[ViolationD
 
     valido, mensaje_error = validar_rango_coordenadas(lat, lon)
     if not valido:
+        def finite_coordinate(value):
+            try:
+                number = float(value)
+                return number if np.isfinite(number) else 0.0
+            except (TypeError, ValueError, OverflowError):
+                return 0.0
         violaciones.append(ViolationDetail(
             satelite=satelite_idx,
             tipo="coordenadas_invalidas",
             nombre="Límites geográficos",
             descripcion=f"El satélite {satelite_idx} tiene coordenadas fuera de rango: {mensaje_error}",
-            coordenadas={"lat": float(lat) if np.isfinite(lat) else 0.0, "lon": float(lon) if np.isfinite(lon) else 0.0}
+            coordenadas={"lat": finite_coordinate(lat), "lon": finite_coordinate(lon)}
         ))
     return violaciones
 
@@ -178,6 +184,7 @@ def is_valid_point(point: Any, scenario: Scenario) -> bool:
     """
     try:
         lat, lon = extraer_coordenadas(point)
+        lat, lon = float(lat), float(lon)
     except Exception:
         return False
     if not (np.isfinite(lat) and np.isfinite(lon)):

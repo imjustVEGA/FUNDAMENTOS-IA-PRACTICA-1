@@ -4,7 +4,7 @@ Aplicación educativa local: ocho satélites, seis regiones y un algoritmo gené
 
 ## Instalación
 
-Python 3.11+ y Node 20.19+ o 22.12+. En PowerShell desde la raíz:
+Python 3.12+ (versiones fijadas verificadas) y Node 20.19+ o 22.12+. En PowerShell desde la raíz:
 
 ```powershell
 python -m venv .venv
@@ -14,7 +14,7 @@ npm.cmd ci
 cd ..
 ```
 
-Si el Python del equipo no instala pip al crear el entorno, usar `python -m pip --python .venv/Scripts/python.exe install -r requirements.txt` desde una instalación con pip. requirements-lock.txt registra las versiones verificadas de esta entrega en Python 3.12; requirements.txt expresa rangos compatibles.
+Si el Python del equipo no instala pip al crear el entorno, usar `python -m pip --python .venv/Scripts/python.exe install -r requirements.txt` desde una instalación con pip. requirements-lock.txt registra las versiones verificadas de esta entrega en Python 3.12; requirements.txt expresa rangos compatibles. Para repetir el entorno verificado, instalar con `-r requirements-lock.txt`.
 
 ## Ejecución
 
@@ -76,3 +76,18 @@ Limitaciones: discretización de 128 muestras, sin dinámica orbital ni separaci
 ## Integración de geometría y cobertura
 
 El módulo del integrante 2 se conserva en backend/app/domain y sus pruebas en backend/tests/domain. Ejecutar las pruebas de ambos conjuntos desde la raíz con `python -m pytest`. La guía original se conserva en docs/aportes/geometria_README.md; se unificará su contrato con el motor sin eliminar la API académica.
+
+## Versión integrada del equipo
+
+Rama de trabajo: `codex/integracion-astroshield`. Integra las ramas publicadas de Ismael, geometría/cobertura, Owen y Mario conservando sus commits. No había ramas separadas de integrantes 5 y 6. Detalles: [docs/09_integracion_ramas.md](docs/09_integracion_ramas.md).
+
+La pestaña **Visor 3D** incorpora la comparación simultánea, fichas y capas de Mario con datos de la API. **Configuración → Escenarios preparados** carga los escenarios normal, reducido, cambiado e inviable de Owen. Los tipos se siguen generando desde Pydantic/OpenAPI. La implementación de dominio del integrante 2 está en backend/app/domain y participa en el motor.
+
+Verificación adicional del frontend: `cd frontend` y `npm.cmd test`. Desde la raíz, `python -m pytest` descubre también backend/tests. Para conservar las evidencias originales al repetir la batería integrada:
+
+```powershell
+.venv/Scripts/python -m scripts.experiments --output results/integration --analysis docs/10_analisis_integracion.md
+.venv/Scripts/python -m scripts.verify_evidence --directory results/integration
+```
+
+El scaffold de docs/aportes/mario-scaffold es documentación histórica: la única instalación frontend activa es frontend/package.json. El muestreo académico aleatorio de 1000 puntos y el determinista de la API de 128 puntos están documentados por separado y comparten la corrección vectorial de polos.

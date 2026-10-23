@@ -1,3 +1,13 @@
+# Estado integrado del visor de Mario
+
+El código ejecutable ahora está en frontend/src/components/globe y sus utilidades en frontend/src/utils. Ejecutar `cd frontend`, `npm ci` y `npm run dev`, junto con la API del README raíz. La pestaña «Visor 3D» recibe datos reales mediante adapters/visualization.ts; no carga mocks por defecto. La vista principal comparte la misma Scene.
+
+El radio de observación, la activación de restricciones, los contadores y los porcentajes proceden del Run del backend. El fixture original permanece en frontend/src/mocks sólo para estudio. La configuración de su aplicación independiente se conserva en docs/aportes/mario-scaffold como archivo histórico; no debe instalarse como una segunda aplicación.
+
+La guía original se reproduce debajo para conservar la explicación del integrante. Sus rutas src/ se entienden ahora relativas a frontend y el apartado de ejecución con mock ya no describe el comportamiento integrado.
+
+---
+
 # Visualización tridimensional AstroShield
 
 ## Ejecutar el visor

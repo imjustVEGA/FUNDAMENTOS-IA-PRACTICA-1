@@ -3,6 +3,7 @@ from .models import Point, Run, Generation
 from .geometry import uniform_point, move
 from .constraints import valid_point
 from .coverage import Evaluator
+from .restrictions.repair import reparar_configuracion
 
 def points(c):
     return [Point(lat=float(a),lon=float(b)) for a,b in c]
@@ -16,13 +17,8 @@ def optimize(scenario, p):
         return result
 
     def repair(c):
-        for j in range(8):
-            if valid_point(c[j],scenario): continue
-            for _ in range(p.attempts):
-                c[j]=uniform_point(rng)
-                if valid_point(c[j],scenario): break
-            else: return None
-        return c
+        repaired, _ = reparar_configuracion(c, scenario, rng=rng, max_intentos=p.attempts)
+        return repaired
 
     population=[]
     # Referencia uniforme sin conocimiento de regiones.

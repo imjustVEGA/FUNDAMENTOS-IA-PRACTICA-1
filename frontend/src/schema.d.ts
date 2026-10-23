@@ -21,6 +21,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/scenarios": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Scenarios */
+        get: operations["scenarios_api_scenarios_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/evaluate": {
         parameters: {
             query?: never;
@@ -134,6 +151,40 @@ export interface paths {
         put?: never;
         /** Compare */
         post: operations["compare_api_compare_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/restrictions/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restriction Validate */
+        post: operations["restriction_validate_api_restrictions_validate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/restrictions/compare": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restriction Compare */
+        post: operations["restriction_compare_api_restrictions_compare_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -339,6 +390,19 @@ export interface components {
              */
             samples: number;
         };
+        /** ScenarioComparison */
+        ScenarioComparison: {
+            /** Anterior Valida */
+            anterior_valida: boolean;
+            /** Actual Valida */
+            actual_valida: boolean;
+            /** Cambio Validez */
+            cambio_validez: boolean;
+            resultado_anterior: components["schemas"]["ValidationResult"];
+            resultado_actual: components["schemas"]["ValidationResult"];
+            /** Detalles */
+            detalles: string;
+        };
         /** ValidationError */
         ValidationError: {
             /** Location */
@@ -351,6 +415,75 @@ export interface components {
             input?: unknown;
             /** Context */
             ctx?: Record<string, never>;
+        };
+        /** ValidationResult */
+        ValidationResult: {
+            /**
+             * Valida
+             * @description True si la constelación cumple el 100% de las restricciones; False en caso contrario
+             */
+            valida: boolean;
+            /**
+             * Total Satelites
+             * @description Cantidad total de satélites evaluados en la configuración
+             */
+            total_satelites: number;
+            /**
+             * Total Violaciones
+             * @description Número de infracciones detectadas
+             */
+            total_violaciones: number;
+            /**
+             * Violaciones
+             * @description Listado exhaustivo y estructurado de las violaciones encontradas
+             */
+            violaciones?: components["schemas"]["ViolationDetail"][];
+            /**
+             * Resumen
+             * @description Resumen textual del dictamen de validación
+             * @default
+             */
+            resumen: string;
+        };
+        /** ViolationDetail */
+        ViolationDetail: {
+            /**
+             * Satelite
+             * @description Índice del satélite infractor (1 a 8), o None si es global
+             */
+            satelite?: number | null;
+            /**
+             * Tipo
+             * @description Tipo de violación: zona_restringida, objeto_existente, coordenadas_invalidas, cantidad_invalida
+             */
+            tipo: string;
+            /**
+             * Nombre
+             * @description Nombre de la zona restringida, objeto o descripción del error
+             */
+            nombre: string;
+            /**
+             * Descripcion
+             * @description Explicación detallada de la violación cometida
+             */
+            descripcion: string;
+            /**
+             * Distancia Deg
+             * @description Distancia angular calculada en grados respecto al centro de la restricción
+             */
+            distancia_deg?: number | null;
+            /**
+             * Radio Limite Deg
+             * @description Radio angular o radio de exclusión que fue invadido
+             */
+            radio_limite_deg?: number | null;
+            /**
+             * Coordenadas
+             * @description Coordenadas geográficas del satélite al momento de la infracción
+             */
+            coordenadas?: {
+                [key: string]: number;
+            } | null;
         };
         /** Zone */
         Zone: {
@@ -399,6 +532,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Scenario"];
+                };
+            };
+        };
+    };
+    scenarios_api_scenarios_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: components["schemas"]["Scenario"];
+                    };
                 };
             };
         };
@@ -615,6 +770,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Comparison"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restriction_validate_api_restrictions_validate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvaluationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationResult"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restriction_compare_api_restrictions_compare_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ComparisonRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScenarioComparison"];
                 };
             };
             /** @description Validation Error */

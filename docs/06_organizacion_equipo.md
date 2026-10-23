@@ -12,3 +12,8 @@ Esta distribución define propietarios futuros; no atribuye trabajo realizado ni
 | 6 | App.tsx, style.css, API, README y guías | Flujo de usuario, errores, exportación, contratos y ejecución |
 
 Interfaces compartidas: Point, Scenario, Parameters, Evaluation, Generation y Run. Cambiar contratos requiere regenerar TypeScript y ejecutar pruebas y build. Acuerden revisiones cruzadas 1↔2, 3↔5, 4↔6. Commits con autor real; no se han fabricado aportaciones del equipo.
+
+
+## Estado tras integrar las ramas publicadas
+
+Se conservaron commits reales de ismael, feat/geometria-cobertura (autor shinee), owen (autor OWEN2703) y mario-visualizacion-3d (autor finebonsai). La tabla de responsabilidades sigue siendo la guía del equipo; los apartados anteriores sobre una implementación inicial asistida describen la base anterior a estas aportaciones. No había ramas separadas para integrantes 5 y 6 al consultar GitHub. Ver docs/09_integracion_ramas.md para historial y decisiones.

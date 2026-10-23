@@ -135,3 +135,21 @@ def latlon_a_xyz(
     y = radio_arr * np.cos(phi) * np.sin(lam)
     z = radio_arr * np.sin(phi)
     return np.stack((x, y, z), axis=-1)
+
+
+def destinos_geodesicos(lat: float, lon: float, angulos: np.ndarray, azimuts: np.ndarray) -> np.ndarray:
+    """Destino sobre base tangente ortonormal, estable incluso exactamente en polos.
+
+    Azimut cero apunta al norte local y pi/2 al este. Devuelve pares lat/lon.
+    """
+    validar_coordenada(lat, lon)
+    a, b = np.radians([lat, lon])
+    centro = latlon_a_xyz(lat, lon, 1)
+    norte = np.array([-np.sin(a)*np.cos(b), -np.sin(a)*np.sin(b), np.cos(a)])
+    este = np.array([-np.sin(b), np.cos(b), 0])
+    t, az = np.broadcast_arrays(angulos, azimuts)
+    direccion = np.cos(az)[..., None]*norte + np.sin(az)[..., None]*este
+    puntos = np.cos(t)[..., None]*centro + np.sin(t)[..., None]*direccion
+    latitudes = np.degrees(np.arctan2(puntos[..., 2], np.hypot(puntos[..., 0], puntos[..., 1])))
+    longitudes = normalizar_longitud(np.degrees(np.arctan2(puntos[..., 1], puntos[..., 0])))
+    return np.stack([latitudes, longitudes], axis=-1)

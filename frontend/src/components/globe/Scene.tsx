@@ -1,7 +1,8 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { Line, Html, OrbitControls, Stars } from '@react-three/drei';
 import type { ThreeEvent } from '@react-three/fiber';
-import { DoubleSide, Vector3 } from 'three';
+import { useThree } from '@react-three/fiber';
+import { DoubleSide, Vector3, PerspectiveCamera } from 'three';
 import { EARTH_RADIUS_SCENE, SATELLITE_RADIUS_SCENE, coordinateToVector3, createSphericalBoundary, createSphericalCapGeometry, kilometersToAngularRadius, latLonToVector3 } from '../../utils/sphericalMath3D';
 import type { ConfigurationView, CoverageRegion, OptimizationState, RestrictedZone, OccupiedObject, VisualizationLayers, VisualizationSelection, Satellite } from '../../types/visualization';
 
@@ -13,13 +14,15 @@ interface SceneProps {
   view: ConfigurationView;
   layers: VisualizationLayers;
   onSelect: (selection: VisualizationSelection) => void;
+  footprintKm?: number;
+  showLabels?: boolean;
 }
 
 const initialColor = '#66a9ff';
 const finalColor = '#66f0df';
 
 export function Scene(props: SceneProps) {
-  const { initialState, finalState, restrictedZones, occupiedObjects, view, layers, onSelect } = props;
+  const { initialState, finalState, restrictedZones, occupiedObjects, view, layers, onSelect, footprintKm=650,showLabels=true } = props;
   const satelliteSets = view === 'initial'
     ? [{ state: initialState, configuration: 'Inicial' as const, color: initialColor }]
     : view === 'final'
@@ -30,6 +33,16 @@ export function Scene(props: SceneProps) {
         ];
   const regions = view === 'initial' ? initialState.regions : finalState.regions;
   const compared = view === 'comparison';
+  const {camera,size}=useThree();
+  useEffect(()=>{
+    if(camera instanceof PerspectiveCamera){
+      const vertical=camera.fov*Math.PI/180;
+      const horizontal=2*Math.atan(Math.tan(vertical/2)*size.width/size.height);
+      const distance=(SATELLITE_RADIUS_SCENE+0.4)/Math.sin(Math.min(vertical,horizontal)/2)*1.1;
+      camera.position.setLength(distance);
+      camera.updateProjectionMatrix();
+    }
+  },[camera,size.width,size.height]);
 
   return <>
     <color attach="background" args={['#050814']} />
@@ -40,15 +53,15 @@ export function Scene(props: SceneProps) {
     <Earth />
 
     {layers.satellites && satelliteSets.map(({ state, configuration, color }) => state.satellites.map((satellite) => (
-      <SatelliteMarker key={`${configuration}-${satellite.id}`} satellite={satellite} configuration={configuration} color={color} showLabel={view !== 'comparison' || configuration === 'Final'} onSelect={onSelect} />
+      <SatelliteMarker key={`${configuration}-${satellite.id}`} satellite={satellite} configuration={configuration} color={color} showLabel={showLabels&&(view !== 'comparison' || configuration === 'Final')} onSelect={onSelect} />
     )))}
     {layers.footprints && satelliteSets.map(({ state, configuration, color }) => state.satellites.map((satellite) => (
-      <SatelliteFootprint key={`footprint-${configuration}-${satellite.id}`} satellite={satellite} color={color} opacity={configuration === 'Inicial' && compared ? 0.045 : compared ? 0.065 : 0.095} />
+      <SatelliteFootprint key={`footprint-${configuration}-${satellite.id}`} satellite={satellite} color={color} footprintKm={footprintKm} opacity={configuration === 'Inicial' && compared ? 0.045 : compared ? 0.065 : 0.095} />
     )))}
     {layers.regions && regions.map((region) => {
       const initial = initialState.regions.find((item) => item.name === region.name);
       const final = finalState.regions.find((item) => item.name === region.name);
-      return <RegionMarker key={region.name} region={region} comparison={compared && initial && final ? { initial: initial.coveragePercentage, final: final.coveragePercentage } : undefined} showLabel onSelect={onSelect} />;
+      return <RegionMarker key={region.name} region={region} comparison={compared && initial && final ? { initial: initial.coveragePercentage, final: final.coveragePercentage } : undefined} showLabel={showLabels} onSelect={onSelect} />;
     })}
     {layers.restrictedZones && restrictedZones.map((zone) => <RestrictedMarker key={zone.name} zone={zone} onSelect={onSelect} />)}
     {layers.occupiedObjects && occupiedObjects.map((object) => <OccupiedMarker key={object.name} object={object} onSelect={onSelect} />)}
@@ -61,7 +74,7 @@ export function Scene(props: SceneProps) {
       enablePan
       screenSpacePanning={false}
       minDistance={6.2}
-      maxDistance={15}
+      maxDistance={40}
       minPolarAngle={0.18}
       maxPolarAngle={Math.PI - 0.18}
       autoRotate={layers.autoRotate}
@@ -81,7 +94,7 @@ function Earth() {
       <meshBasicMaterial color="#2780ad" wireframe transparent opacity={0.08} depthWrite={false} />
     </mesh>
     <GeographicGrid />
-    <ContinentOutlines />
+    <NaturalEarthOutlines />
     <mesh>
       <sphereGeometry args={[EARTH_RADIUS_SCENE * 1.055, 64, 64]} />
       <meshBasicMaterial color="#217cb8" transparent opacity={0.035} side={DoubleSide} depthWrite={false} />
@@ -112,6 +125,25 @@ function ContinentOutlines() {
   return <group>{outlines.map((points, index) => <Line key={`continent-${index}`} points={points.map(([lat, lon]) => latLonToVector3(lat, lon, EARTH_RADIUS_SCENE * 1.017))} color="#54bbdb" transparent opacity={0.58} lineWidth={1.15} />)}</group>;
 }
 
+function NaturalEarthOutlines() {
+  const [outlines,setOutlines]=useState<Vector3[][]|null>(null);
+  const [failed,setFailed]=useState(false);
+  useEffect(()=>{
+    let active=true;
+    fetch('/land.geojson').then(r=>{if(!r.ok)throw Error('Geografía no disponible');return r.json();}).then(data=>{
+      const lines:Vector3[][]=[];
+      for(const feature of data.features){
+        const polygons=feature.geometry.type==='Polygon'?[feature.geometry.coordinates]:feature.geometry.coordinates;
+        for(const polygon of polygons)for(const ring of polygon)lines.push(ring.map(([lon,lat]:number[])=>latLonToVector3(lat,lon,EARTH_RADIUS_SCENE*1.017)));
+      }
+      if(active)setOutlines(lines);
+    }).catch(()=>{if(active)setFailed(true);});
+    return ()=>{active=false;};
+  },[]);
+  if(failed)return <ContinentOutlines/>;
+  return <group>{outlines?.map((points,i)=><Line key={i} points={points} color="#54bbdb" transparent opacity={.58} lineWidth={.8}/>)}</group>;
+}
+
 function sampleParallel(lat: number, radius: number): Vector3[] {
   const points: Vector3[] = [];
   for (let lon = -180; lon <= 180; lon += 4) points.push(latLonToVector3(lat, lon, radius));
@@ -135,6 +167,7 @@ function Cap({ center, angularRadius, color, opacity, radius = EARTH_RADIUS_SCEN
 }) {
   const geometry = useMemo(() => createSphericalCapGeometry(center, angularRadius, radius, 10, 64, offset), [center.lat, center.lon, angularRadius, radius, offset]);
   const boundary = useMemo(() => createSphericalBoundary(center, angularRadius, radius, 96, offset + 0.008), [center.lat, center.lon, angularRadius, radius, offset]);
+  useEffect(()=>()=>geometry.dispose(),[geometry]);
   return <group>
     <mesh geometry={geometry} renderOrder={3}>
       <meshBasicMaterial color={color} transparent opacity={opacity} side={DoubleSide} depthWrite={false} wireframe={wireframe} />
@@ -167,8 +200,8 @@ function SatelliteMarker({ satellite, configuration, color, showLabel, onSelect 
   </group>;
 }
 
-function SatelliteFootprint({ satellite, color, opacity }: { satellite: Satellite; color: string; opacity: number }) {
-  return <Cap center={satellite} angularRadius={kilometersToAngularRadius(650)} color={color} opacity={opacity} offset={0.015} />;
+function SatelliteFootprint({ satellite, color, opacity,footprintKm }: { satellite: Satellite; color: string; opacity: number;footprintKm:number }) {
+  return <Cap center={satellite} angularRadius={kilometersToAngularRadius(footprintKm)} color={color} opacity={opacity} offset={0.015} />;
 }
 
 function RegionMarker({ region, comparison, showLabel, onSelect }: {

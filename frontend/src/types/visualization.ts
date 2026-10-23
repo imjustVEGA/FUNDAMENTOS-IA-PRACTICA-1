@@ -14,6 +14,7 @@ export type RegionPriority = 'alta' | 'media' | 'normal';
 export interface CoverageRegion extends GeoCoordinate {
   name: string;
   priority: RegionPriority;
+  weight?: number;
   radiusKm: number;
   coveragePercentage: number;
   isCovered: boolean;
@@ -42,6 +43,7 @@ export interface OptimizationState {
 /** Respuesta normalizada que el adaptador del backend debe entregar al visor. */
 export interface OptimizationResponse {
   earthRadiusKm: number;
+  footprintKm?: number;
   initialState: OptimizationState;
   finalState: OptimizationState;
   restrictedZones: RestrictedZone[];

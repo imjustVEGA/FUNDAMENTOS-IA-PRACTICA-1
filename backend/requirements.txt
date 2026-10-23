@@ -1,2 +1,2 @@
-﻿numpy>=2.0
-pytest>=8.0
+# Instalación unificada desde la raíz; evita versiones divergentes entre módulos.
+-r ../requirements.txt
